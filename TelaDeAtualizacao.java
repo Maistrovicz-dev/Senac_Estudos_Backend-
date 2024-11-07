@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -9,9 +10,12 @@ public class TelaDeAtualizacao extends JFrame {
 
     public static JLabel lblNome;
     public static JTextField txtNome;
+    public static String txtNomeCarregado;
 
     public static JLabel lblEmail;
     public static JTextField txtEmail;
+    public static String txtEmailCarregado;
+
 
     public static JLabel lblSenha;
     public static JPasswordField txtSenha;
@@ -57,6 +61,7 @@ public class TelaDeAtualizacao extends JFrame {
         addComponent(txtSenha, 3, 1, 1, 1);
 
         btnAtualizar = new JButton("Atualizar");
+        btnAtualizar.setEnabled(false);
         addComponent(btnAtualizar, 4, 0, 1, 1);
 
         btnCancelar = new JButton("Cancelar");
@@ -64,6 +69,58 @@ public class TelaDeAtualizacao extends JFrame {
 
         lblNotificacoes = new JLabel("Notificações", SwingConstants.CENTER);
         addComponent(lblNotificacoes, 5, 0, 2, 1);
+
+        txtNome.addKeyListener(
+            new KeyAdapter() {
+                
+                @Override
+                public void keyReleased(KeyEvent event){
+                    if (txtNomeCarregado.trim().equals(txtNome.getText().trim())) {
+                        btnAtualizar.setEnabled(false);
+    
+                    } else {
+                        btnAtualizar.setEnabled(true);
+                    }
+                }
+                
+            }
+           
+        );
+
+        txtEmail.addKeyListener(
+            new KeyAdapter() {
+
+                @Override
+                public void keyReleased(KeyEvent event){
+                    if (txtEmailCarregado.trim().equals(txtNome.getText().trim())) {
+                        btnAtualizar.setEnabled(false);
+    
+                    } else {
+                        btnAtualizar.setEnabled(true);
+                    }
+                }
+                
+            }
+           
+        );
+      
+        txtSenha.addKeyListener(
+            new KeyAdapter() {
+
+                @Override
+                public void keyReleased(KeyEvent event){
+                    if (String.valueOf(txtSenha.getPassword()).trim().length()==0) {
+                        btnAtualizar.setEnabled(false);
+                    } else {
+                        btnAtualizar.setEnabled(true);
+                    }
+                }
+                
+            }
+           
+        );
+
+
 
         setSize(206,200);
         setVisible(true);
@@ -109,19 +166,41 @@ public class TelaDeAtualizacao extends JFrame {
         return "<html><body>" + str + "</body></html>";
     }
 
+    public static void atualizarCampos(String strId) {
+        try{
+        Connection conexao = MySQLConnector.conectar();
+        String strSqlAtualizarCampos = "select * from db_senac.tbl_senac where id = " + strId + ";";
+        Statement stmSqlAtualizarCampos = conexao.createStatement();
+        ResultSet rstSqlAtualizarCampos = stmSqlAtualizarCampos.executeQuery
+        (strSqlAtualizarCampos);
+        if (rstSqlAtualizarCampos.next()) {
+            txtNome.setText(rstSqlAtualizarCampos.getString("nome"));
+            txtNomeCarregado = txtNome.getText();
+            txtEmail.setText(rstSqlAtualizarCampos.getString("email"));
+            txtEmailCarregado = txtEmail.getText();
+        } else {
+            notificarUsuario("Id não encontrado");
+        }
+    } catch (Exception e) {
+        notificarUsuario("Ops! Ocorreu um problema no servidor e não sera possivel carregar os ids neste momento. Por Favor, retorne novamente mais tarde.");
+            System.err.println("Erro: " + e);
+    }
+
+    }
+
     public static TelaDeAtualizacao appTelaDeAtualizacao;
     public static void main(String[] args) {
         appTelaDeAtualizacao = new TelaDeAtualizacao();
         appTelaDeAtualizacao.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // appTelaDeAtualizacao.getRootPane().addComponentListener(
-        //     new ComponentAdapter() {
-        //         public void componentResized(ComponentEvent e) {
-        //             int larguraTela = appTelaDeAtualizacao.getWidth();
-        //             int alturaTela = appTelaDeAtualizacao.getHeight();
-        //             notificarUsuario(String.format("Largura: %s, Altura: %s", larguraTela, alturaTela));
-        //         }
-        //     }
-        // );
+         appTelaDeAtualizacao.getRootPane().addComponentListener(
+             new ComponentAdapter() {
+                 public void componentResized(ComponentEvent e) {
+                     int larguraTela = appTelaDeAtualizacao.getWidth();
+                     int alturaTela = appTelaDeAtualizacao.getHeight();
+                     notificarUsuario(String.format("Largura: %s, Altura: %s", larguraTela, alturaTela));
+                 }
+             }
+         );
     }
 }
