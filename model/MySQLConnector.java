@@ -1,4 +1,4 @@
-
+package model;
 
 import java.sql.*;
 
@@ -10,7 +10,7 @@ public class MySQLConnector
         String mysqlHost = "127.0.0.1";
         String mysqlDb = "db_senac";
         String mysqlUser = "root";
-        String mysqlPassword = "131313";
+        String mysqlPassword = "senac@02";
         String mysqlPort = "3306";
         String mysqlUrl = "jdbc:mysql://" + mysqlHost + ":" + mysqlPort + "/" + 
         mysqlDb + "?user=" + mysqlUser + "&password=" + mysqlPassword;
