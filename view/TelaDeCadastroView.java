@@ -21,57 +21,42 @@ public class TelaDeCadastroView extends JFrame {
 
     public static JLabel lblNotificacoes;
 
+    public static GridBagLayout gbLayout;
+    public static GridBagConstraints gbConstraints;
+
     public TelaDeCadastroView() {
         super("Tela de Cadastro");
-        setLayout(new GridLayout(5,1,5,5));
 
-        JPanel linhaNome = new JPanel(new GridLayout(1,2));
+        gbLayout = new GridBagLayout();
+        setLayout(gbLayout);
+        gbConstraints = new GridBagConstraints();
 
         lblNome = new JLabel("Nome:", SwingConstants.RIGHT);
+        addComponent(lblNome, 0, 0, 1, 1);
+
         txtNome = new JTextField(10);
-
-        linhaNome.add(lblNome);
-        linhaNome.add(txtNome);
-
-        add(linhaNome);
-
-        JPanel linhaEmail = new JPanel(new GridLayout(1,2));
+        addComponent(txtNome, 0, 1, 1, 1);
 
         lblEmail = new JLabel("Email:", SwingConstants.RIGHT);
+        addComponent(lblEmail, 1, 0, 1, 1);
+
         txtEmail = new JTextField(10);
-
-        linhaEmail.add(lblEmail);
-        linhaEmail.add(txtEmail);
-
-        add(linhaEmail);
-
-        JPanel linhaSenha = new JPanel(new GridLayout(1,2));
+        addComponent(txtEmail, 1, 1, 1, 1);
 
         lblSenha = new JLabel("Senha:", SwingConstants.RIGHT);
+        addComponent(lblSenha, 2, 0, 1, 1);
+
         txtSenha = new JPasswordField(10);
-
-        linhaSenha.add(lblSenha);
-        linhaSenha.add(txtSenha);
-
-        add(linhaSenha);
-
-        JPanel linhaBotoes = new JPanel(new GridLayout(1,2));
+        addComponent(txtSenha, 2, 1, 1, 1);
 
         btnCadastrar = new JButton("Cadastrar");
+        addComponent(btnCadastrar, 3, 0, 1, 1);
+
         btnCancelar = new JButton("Cancelar");
-
-        linhaBotoes.add(btnCadastrar);
-        linhaBotoes.add(btnCancelar);
-
-        add(linhaBotoes);
-
-        JPanel linhaNotificacoes = new JPanel(new GridLayout(1,1));
+        addComponent(btnCancelar, 3, 1, 1, 1);
 
         lblNotificacoes = new JLabel("Notificações", SwingConstants.CENTER);
-
-        linhaNotificacoes.add(lblNotificacoes);
-
-        add(linhaNotificacoes);
+        addComponent(lblNotificacoes, 4, 0, 2, 1);
 
         btnCadastrar.addActionListener(
             new ActionListener() {
@@ -94,13 +79,11 @@ public class TelaDeCadastroView extends JFrame {
                         txtSenha.requestFocus();
                         return;
                     }
-                    
-                    TelaDeCadastroController.cadastrarController();
 
+                    TelaDeCadastroController.cadastrarController();
                 }
             }
         );
-        
 
         btnCancelar.addActionListener(
             new ActionListener() {
@@ -111,21 +94,51 @@ public class TelaDeCadastroView extends JFrame {
             }
         );
 
-        setSize(300,300);
+        setSize(217,154);
         setVisible(true);
     }
-    public static void notificarUsuario(String txt){
+
+    public void addComponent(Component component, int row, int column, int width, int height) {
+        if (height > 1 && width > 1) {
+            gbConstraints.fill = GridBagConstraints.BOTH;
+        } else if (height > 1) {
+            gbConstraints.fill = GridBagConstraints.VERTICAL;
+        } else {
+            gbConstraints.fill = GridBagConstraints.HORIZONTAL;
+        }
+        gbConstraints.gridy = row;
+        gbConstraints.gridx = column;
+        gbConstraints.gridwidth = width;
+        gbConstraints.gridheight = height;
+        // gbConstraints.insets = new Insets(1, 1, 1, 1); // sugestão de margem de elemento, crédios pro aluno Fernando
+        gbLayout.setConstraints(component, gbConstraints);
+        add(component);
+    }
+
+    public static void notificarUsuario(String txt) {
         lblNotificacoes.setText(setHtmlFormat(txt));
     }
 
-    public static String setHtmlFormat (String str) {
+    public static String setHtmlFormat(String str) {
         return "<html><body>" + str + "</body></html>";
     }
 
-    public static TelaDeCadastroView appTelaDeCadastroView;
+    public static void verificarLarguraEAltura() { // checkFrameWidthHeight()
+        appTelaDeCadastroView.getRootPane().addComponentListener(
+            new ComponentAdapter() {
+                public void componentResized(ComponentEvent e) {
+                    int larguraTela = appTelaDeCadastroView.getWidth();
+                    int alturaTela = appTelaDeCadastroView.getHeight();
+                    notificarUsuario(String.format("Largura: %s, Altura: %s", larguraTela, alturaTela));
+                }
+            }
+        );
+    }
 
+    public static TelaDeCadastroView appTelaDeCadastroView;
     public static void main(String[] args) {
-        TelaDeCadastroView appTelaDeCadastroView = new TelaDeCadastroView();
+        appTelaDeCadastroView = new TelaDeCadastroView();
         appTelaDeCadastroView.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // verificarLarguraEAltura();
     }
 }
