@@ -1,9 +1,7 @@
+
 package model;
 import controller.*;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 import java.sql.*;
 
 public class TelaDePesquisaModel {
@@ -33,7 +31,7 @@ public class TelaDePesquisaModel {
             }
 
             if (rstSqlInicializacao.first()) {
-                TelaDePesquisaController.atualizarCampos(rstSqlInicializacao.getString("id"), rstSqlInicializacao.getString("nome"), rstSqlInicializacao.getString("email"));
+                TelaDePesquisaController.atualizarCampos(rstSqlInicializacao.getString("id"), rstSqlInicializacao.getString("nome"), rstSqlInicializacao.getString("email"), rstSqlInicializacao.getString("img"));
                 TelaDePesquisaController.notificarUsuario("Foram encontrados \"" + qtdResultados + "\" registros. Primeiro registro posicionado com sucesso!");
                 TelaDePesquisaController.habilitarAvancar();
             } else {
@@ -55,7 +53,7 @@ public class TelaDePesquisaModel {
             Statement stmSqlProximoRegistro = conexao.createStatement();
             ResultSet rstSqlProximoRegistro = stmSqlProximoRegistro.executeQuery(strSqlProximoRegistro);
             if (rstSqlProximoRegistro.next()) {
-                TelaDePesquisaController.atualizarCampos(rstSqlProximoRegistro.getString("id"), rstSqlProximoRegistro.getString("nome"), rstSqlProximoRegistro.getString("email"));
+                TelaDePesquisaController.atualizarCampos(rstSqlProximoRegistro.getString("id"), rstSqlProximoRegistro.getString("nome"), rstSqlProximoRegistro.getString("email"), rstSqlProximoRegistro.getString("img"));
                 TelaDePesquisaController.notificarUsuario("Próximo registro posicionado com sucesso!");
                 TelaDePesquisaController.habilitarTodos();
             } else {
@@ -76,7 +74,7 @@ public class TelaDePesquisaModel {
             Statement stmSqlUltimoRegistro = conexao.createStatement();
             ResultSet rstSqlUltimoRegistro = stmSqlUltimoRegistro.executeQuery(strSqlUltimoRegistro);
             if (rstSqlUltimoRegistro.next()) {
-                TelaDePesquisaController.atualizarCampos(rstSqlUltimoRegistro.getString("id"), rstSqlUltimoRegistro.getString("nome"), rstSqlUltimoRegistro.getString("email"));
+                TelaDePesquisaController.atualizarCampos(rstSqlUltimoRegistro.getString("id"), rstSqlUltimoRegistro.getString("nome"), rstSqlUltimoRegistro.getString("email"), rstSqlUltimoRegistro.getString("img"));
                 TelaDePesquisaController.notificarUsuario("Último registro posicionado com sucesso!");
                 TelaDePesquisaController.habilitarVoltar();
             } else {
@@ -96,7 +94,7 @@ public class TelaDePesquisaModel {
             Statement stmSqlRegistroAnterior = conexao.createStatement();
             ResultSet rstSqlRegistroAnterior = stmSqlRegistroAnterior.executeQuery(strSqlRegistroAnterior);
             if (rstSqlRegistroAnterior.next()) {
-                TelaDePesquisaController.atualizarCampos(rstSqlRegistroAnterior.getString("id"), rstSqlRegistroAnterior.getString("nome"), rstSqlRegistroAnterior.getString("email"));
+                TelaDePesquisaController.atualizarCampos(rstSqlRegistroAnterior.getString("id"), rstSqlRegistroAnterior.getString("nome"), rstSqlRegistroAnterior.getString("email"), rstSqlRegistroAnterior.getString("img"));
                 TelaDePesquisaController.notificarUsuario("Registro anterior posicionado com sucesso!");
                 TelaDePesquisaController.habilitarTodos();
             } else {
